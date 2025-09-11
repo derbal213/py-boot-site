@@ -18,12 +18,19 @@ class TestParentNode(unittest.TestCase):
         )
 
     def test_to_html_no_children(self):
-        with self.assertRaises(ValueError):
+        with self.assertRaises(ValueError) as cm1:
             ParentNode("p", None).to_html()
+        self.assertIn("Must include children", str(cm1.exception))
+
+        node2 = ParentNode("div", [])
+        with self.assertRaises(ValueError) as cm2:
+            node2.to_html()
+        self.assertIn("Must include children", str(cm2.exception))
 
     def test_to_html_no_tag(self):
-        with self.assertRaises(ValueError):
+        with self.assertRaises(ValueError) as cm1:
             ParentNode(None, None).to_html()
+        self.assertIn("Must include a tag", str(cm1.exception))
 
     def test_to_html_multiple_leafs(self):
         child1 = LeafNode("a", "This is a link", {"href":"boot.dev", "target": "_blank"})
@@ -41,3 +48,14 @@ class TestParentNode(unittest.TestCase):
         expected = '<div><p title="This is a paragraph"><a href="boot.dev" target="_blank">This is a link</a><b>This is bold text</b></p></div>'
         actual = parent_parent.to_html()
         self.assertEqual(expected, actual)
+
+    def test_to_html_with_props(self):
+        child = LeafNode("p", "text")
+        parent = ParentNode("section", [child], props={"class": "main", "id": "s1"})
+
+        result = parent.to_html()
+        self.assertTrue(result.startswith("<section "))
+        self.assertIn('class="main"', result)
+        self.assertIn('id="s1"', result)
+        self.assertTrue(result.endswith("</section>"))
+        self.assertIn("<p>text</p>", result)
