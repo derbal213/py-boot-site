@@ -1,19 +1,23 @@
 from textnode import TextNode, TextType
 from htmlnode import HTMLNode
 from leafnode import LeafNode
+from parentnode import ParentNode
 
 def main():
     text_node = TextNode("This is some anchor text", TextType.LINK, "https://www.boot.dev")
-    print(text_node)
+    #print(text_node)
     
     props = {"href":"boot.dev", "target":"_blank"}
     props2 = {"href":"boot.dev"}
     child = HTMLNode("a", "This is a child", None, props2)
     html_node = HTMLNode("p", "This is a paragraph", child, props)
-    print(html_node)
+    #print(html_node)
 
-    node = LeafNode("p", "Hello, world!")
-    print(node.to_html())
+    node = LeafNode("i", "Hello, world!")
+    #print(node.to_html())
+
+    parentNode = ParentNode("p", [node])
+    print(parentNode.to_html())
 
 if __name__ == "__main__":
     main()
