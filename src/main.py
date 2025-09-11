@@ -1,5 +1,6 @@
 from textnode import TextNode, TextType
 from htmlnode import HTMLNode
+from leafnode import LeafNode
 
 def main():
     text_node = TextNode("This is some anchor text", TextType.LINK, "https://www.boot.dev")
@@ -10,6 +11,9 @@ def main():
     child = HTMLNode("a", "This is a child", None, props2)
     html_node = HTMLNode("p", "This is a paragraph", child, props)
     print(html_node)
+
+    node = LeafNode("p", "Hello, world!")
+    print(node.to_html())
 
 if __name__ == "__main__":
     main()
