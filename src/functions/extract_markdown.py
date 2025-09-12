@@ -1,11 +1,12 @@
 import re
 
+IMAGE_PATTERN = r'!\[([^\]]*)\]\(([^)]*)\)'
+LINK_PATTERN = r'(?<!!)\[([^\]]*)\]\(([^)]*)\)'
+
 def extract_markdown_images(text):
-    pattern = r'!\[([^\]]*)\]\(([^)]*)\)'
-    images = re.findall(pattern, text)
+    images = re.findall(IMAGE_PATTERN, text)
     return images
 
 def extract_markdown_links(text):
-    pattern = r'(?<!!)\[([^\]]*)\]\(([^)]*)\)'
-    links = re.findall(pattern, text)
+    links = re.findall(LINK_PATTERN, text)
     return links
