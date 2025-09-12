@@ -29,3 +29,12 @@ def text_node_to_html_node(text_node: TextNode):
             return LeafNode("img", "", props)
         case _:
             raise ValueError("Text type does not match an HTML tag")
+        
+def text_nodes_to_leaf_nodes(text_nodes: list[TextNode]):
+    if text_nodes is None:
+        return None
+    
+    leaf_nodes = []
+    for n in text_nodes:
+        leaf_nodes.append(text_node_to_html_node(n))
+    return leaf_nodes
