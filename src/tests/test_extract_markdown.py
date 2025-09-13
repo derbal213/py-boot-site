@@ -1,5 +1,5 @@
 import unittest
-from functions.extract_markdown import extract_markdown_images, extract_markdown_links
+from functions.extract_markdown import extract_markdown_images, extract_markdown_links, markdown_to_blocks
 
 class TestExtractMarkdown(unittest.TestCase):
     def test_extract_markdown_images(self):
@@ -118,3 +118,4 @@ class TestExtractMarkdown(unittest.TestCase):
         matched_imgs = extract_markdown_images(text)
         self.assertListEqual(expected_links, matched_links)
         self.assertListEqual(expected_imgs, matched_imgs)
+
