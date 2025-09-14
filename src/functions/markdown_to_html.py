@@ -10,8 +10,13 @@ QUOTE_REMOVE_REGEX = r'(?m)^>'
 
 def markdown_to_html(markdown):
     md_blocks = markdown_to_blocks(markdown)
+    children = []
     for block in md_blocks:
         nodes = block_to_block_node(block)
+        children.extend(nodes)
+
+    div = ParentNode("div", children)
+    return div
 
 def block_to_block_node(block: str):
     block_type = block_to_block_type(block)
