@@ -2,13 +2,16 @@ from textnode import TextNode, TextType
 from htmlnode import HTMLNode
 from parentnode import ParentNode
 from leafnode import LeafNode
+from functions.block import BlockType
 
-def text_node_to_html_node(text_node: TextNode):
+def text_node_to_html_node(text_node: TextNode, block_type: BlockType = None):
     if text_node is None:
         return None
     
     match text_node.text_type:
         case TextType.PLAIN:
+            if block_type == BlockType.UNORDERED_LIST or block_type == BlockType.ORDERED_LIST:
+                return LeafNode("li", text_node.text)
             node = LeafNode(None, text_node.text)
             return node
         case TextType.BOLD:
@@ -30,11 +33,11 @@ def text_node_to_html_node(text_node: TextNode):
         case _:
             raise ValueError("Text type does not match an HTML tag")
         
-def text_nodes_to_leaf_nodes(text_nodes: list[TextNode]):
+def text_nodes_to_leaf_nodes(text_nodes: list[TextNode], block_type: BlockType = None):
     if text_nodes is None:
         return None
     
     leaf_nodes = []
     for n in text_nodes:
-        leaf_nodes.append(text_node_to_html_node(n))
+        leaf_nodes.append(text_node_to_html_node(n), block_type)
     return leaf_nodes
