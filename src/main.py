@@ -3,7 +3,7 @@ from htmlnode import HTMLNode
 from leafnode import LeafNode
 from parentnode import ParentNode
 from functions.extract_markdown import extract_markdown_images, extract_markdown_links
-from functions.text_to_text_nodes import text_to_text_node
+from functions.text_to_text_nodes import text_to_text_nodes
 
 def main():
     text_node = TextNode("This is some anchor text", TextType.LINK, "https://www.boot.dev")
@@ -30,7 +30,7 @@ def main():
     # [("to boot dev", "https://www.boot.dev"), ("to youtube", "https://www.youtube.com/@bootdotdev")]
 
     text= "This is **text** with an _italic_ word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)"
-    text_to_text_node(text)
+    text_to_text_nodes(text)
     
 if __name__ == "__main__":
     main()

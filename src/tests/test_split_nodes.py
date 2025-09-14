@@ -1,8 +1,9 @@
 import unittest
-from functions.split_nodes import split_nodes_delimiter, split_nested_delimiter, split_nodes_image_and_links
-from functions.text_to_html import text_node_to_html_node, text_nodes_to_leaf_nodes
+from functions.split_nodes import split_nodes_delimiter, split_nested_nodes, split_nodes_image_and_links
+from functions.text_to_html import text_node_to_html_node, text_nodes_to_leaf_nodes, text_nodes_with_children_to_html
 from textnode import TextNode, TextType, TextTypeSyntax
 from parentnode import ParentNode
+from functions.text_to_text_nodes import text_to_text_nodes
 
 class TestSplitNode(unittest.TestCase):
     def test_code(self):
@@ -46,17 +47,6 @@ class TestSplitNode(unittest.TestCase):
             expected = expected_vals[i]
             #print(expected)
             self.assertEqual(expected, parent_node.to_html())
-    
-    """ def test_nested(self):
-        node = TextNode(f"This is text with an _italic and **bold**_ word", TextType.PLAIN)
-        new_nodes = split_nested_delimiter([node])
-        print(new_nodes)
-        self.assertEqual(5, len(new_nodes))
-
-        leaf_nodes = text_nodes_to_leaf_nodes(new_nodes)
-        parent = ParentNode("p", leaf_nodes)
-        expected = "<p>This is text with an <i>italic and <b>bold</b></i> word</p>"
-        self.assertEqual(expected, parent.to_html()) """
 
     def test_split_img(self):
         node = TextNode("This is a text node with an image ![alt text](www.google.com/test.png)", TextType.PLAIN)
@@ -141,3 +131,42 @@ class TestSplitNode(unittest.TestCase):
             ],
             new_nodes,
         )
+
+    def test_nested(self):
+        node = TextNode(f"This is text with an _italicized and **bolded**_ word", TextType.PLAIN)
+        new_nodes = split_nested_nodes([node])
+        #print(new_nodes)
+        expected_nodes = [
+            TextNode("This is text with an ", TextType.PLAIN),
+            TextNode("", TextType.ITALIC, None, [
+                TextNode("italicized and ", TextType.PLAIN),
+                TextNode("bolded", TextType.BOLD)
+            ]),
+            TextNode(" word", TextType.PLAIN)
+        ]
+        self.assertListEqual(expected_nodes, new_nodes)
+
+        nodes = text_nodes_with_children_to_html(new_nodes)
+        #print(nodes)
+        parent = ParentNode("p", nodes)
+        expected = "<p>This is text with an <i>italicized and <b>bolded</b></i> word</p>"
+        self.assertEqual(expected, parent.to_html())
+
+    def test_nested_decorated_links(self):
+        node = TextNode(f"This is text with an [_italicized and **bolded**_ link](example.com)", TextType.PLAIN)
+        new_nodes = split_nested_nodes([node])
+        expected_nodes = [
+            TextNode("This is text with an ", TextType.PLAIN),
+            TextNode("", TextType.LINK, "example.com", [
+                TextNode("", TextType.ITALIC, None, [
+                    TextNode("italicized and ", TextType.PLAIN),
+                    TextNode("bolded", TextType.BOLD)
+                ]),
+            TextNode(" link", TextType.PLAIN)])
+        ]
+        self.assertListEqual(expected_nodes, new_nodes)
+
+        nodes = text_nodes_with_children_to_html(new_nodes)
+        parent = ParentNode("p", nodes)
+        expected = '<p>This is text with an <a href="example.com"><i>italicized and <b>bolded</b></i> link</a></p>'
+        self.assertEqual(expected, parent.to_html())

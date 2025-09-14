@@ -12,17 +12,17 @@ class TextTypeSyntax:
     BOLD = "**"
     ITALIC = "_"
     CODE = "`"
-    ALL_OPTIONS = [BOLD, ITALIC, CODE]
+    LINK = "["
+    IMAGE = "!["
+    LINK_IMAGE_END = "]"
+    ALL_OPTIONS = [BOLD, ITALIC, CODE, LINK, IMAGE]
 
 class TextNode():
-    def __init__(self, text, text_type, url=None, text_types=None):
+    def __init__(self, text: str, text_type, url=None, child_nodes = None):
         self.text = text
         self.text_type = text_type
         self.url = url
-        if text_types is None:
-            self.text_types = [text_type]
-        else: 
-            self.text_types = text_types
+        self.children = child_nodes
 
     def __eq__(self, value):
         if self.text != value.text:
@@ -31,8 +31,9 @@ class TextNode():
             return False
         if self.url != value.url:
             return False
+        if self.children != value.children:
+            return False
         return True
     
     def __repr__(self):
-        text_types = f"[{",".join([t.value for t in self.text_types])}]"
-        return f"TextNode({self.text}, {self.text_type.value}, {self.url}, {text_types})"
+        return f"TextNode({self.text}, {self.text_type.value}, {self.url}, {self.children})"
