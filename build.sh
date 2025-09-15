@@ -1,1 +1,1 @@
-python3 src/main.py "/https://github.com/derbal213/py-boot-site/"
+python3 src/main.py "/py-boot-site/"
