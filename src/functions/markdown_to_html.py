@@ -61,23 +61,23 @@ def text_to_parent(text, parent_tag, block_type: BlockType = None):
         nodes = text_nodes_to_leaf_nodes(text_nodes, block_type)
     return ParentNode(parent_tag, nodes)
 
-def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
+def generate_pages_recursive(dir_path_content, template_path, dest_dir_path, base_path = "/"):
     items = os.listdir(dir_path_content)
     for i in items:
         path = os.path.join(dir_path_content, i)
         ext = os.path.splitext(i)[1]
         if os.path.isfile(path):
             if ext == ".md":
-                generate_page(path, template_path, os.path.join(dest_dir_path, i.replace(ext, ".html")))
+                generate_page(path, template_path, os.path.join(dest_dir_path, i.replace(ext, ".html")), base_path)
             else:
                 print(f"Skipping file without .md extension: {path}")
         else:
             # Directory
             new_dest = os.path.join(dest_dir_path, i)
-            generate_pages_recursive(path, template_path, new_dest)
+            generate_pages_recursive(path, template_path, new_dest, base_path)
 
 
-def generate_page(from_path, template_path, dest_path):
+def generate_page(from_path, template_path, dest_path, base_path = "/"):
     print(f"-> Generating page from {from_path}\n---> TO {dest_path}\n---> USING {template_path}")
     src_content = read_file(from_path)
     template_content = read_file(template_path)
@@ -89,6 +89,8 @@ def generate_page(from_path, template_path, dest_path):
 
     html = markdown_to_html(src_content).to_html()
     final_content = template_content.replace("{{ Title }}", title).replace("{{ Content }}", html)
+    final_content = final_content.replace('href="/', f'href="{base_path}')
+    final_content = final_content.replace('src="/', f'src="{base_path}')
     check_directory(dest_path)
     write_file(dest_path, final_content)
 
