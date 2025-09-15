@@ -26,6 +26,34 @@ across two lines```
 >-Michael Scott
 """
 
+    block_extra_line_md = """
+This is a **bolded** paragraph
+
+
+This is another paragraph with _italic_ text and `code` here
+This is the same paragraph on a new line
+
+
+### This is a header
+
+
+```This is a code block
+across two lines```
+
+
+1. This is an ordered list
+2. With multiple items
+
+
+- This is an unordered list
+- with items
+
+
+>This is a quote
+>That goes onto two lines
+>-Michael Scott
+"""
+
     def test_header_node(self):
         markdown = "### This is a header"
         node = block_to_block_node(markdown)
@@ -215,6 +243,44 @@ across two lines```
     
     def test_big_markdown(self):
         div = markdown_to_html(self.block_md)
+        expected = ParentNode("div", [
+            ParentNode("p", [
+                LeafNode(None, "This is a "),
+                LeafNode("b", "bolded"),
+                LeafNode(None, " paragraph")]),
+            ParentNode("p", [
+                LeafNode(None, "This is another paragraph with "),
+                LeafNode("i", "italic"),
+                LeafNode(None, " text and "),
+                LeafNode("code", "code"),
+                LeafNode(None, " here\nThis is the same paragraph on a new line")]),
+            LeafNode("h3", "This is a header"),
+            LeafNode("code", "This is a code block\nacross two lines"),
+            ParentNode("ol", [
+                ParentNode("li", [
+                    LeafNode(None, "This is an ordered list"),
+                ]),
+                ParentNode("li", [
+                    LeafNode(None, "With multiple items")
+                ])
+            ]),
+            ParentNode("ul", [
+                ParentNode("li", [
+                    LeafNode(None, "This is an unordered list"),
+                ]),
+                ParentNode("li", [
+                    LeafNode(None, "with items")
+                ])
+            ]),
+            ParentNode("blockquote", [
+                LeafNode(None, "This is a quote\nThat goes onto two lines\n-Michael Scott")
+            ])
+        ])
+        self.assertEqual(expected, div)
+        self.assertEqual(expected.to_html(), div.to_html())
+
+    def test_big_extra_line_markdown(self):
+        div = markdown_to_html(self.block_extra_line_md)
         expected = ParentNode("div", [
             ParentNode("p", [
                 LeafNode(None, "This is a "),
