@@ -59,7 +59,9 @@ def text_nodes_to_leaf_nodes(text_nodes: list[TextNode], block_type: BlockType =
     
     leaf_nodes = []
     for n in text_nodes:
-        leaf_nodes.append(text_node_to_html_node(n, block_type))
+        html_node = text_node_to_html_node(n, block_type)
+        if not html_node.is_blank():
+            leaf_nodes.append(text_node_to_html_node(n, block_type))
     return leaf_nodes
 
 
