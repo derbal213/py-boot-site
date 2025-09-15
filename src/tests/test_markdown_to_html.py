@@ -10,7 +10,7 @@ This is a **bolded** paragraph
 This is another paragraph with _italic_ text and `code` here
 This is the same paragraph on a new line
 
-### This is a header
+### This is **a** _header_
 
 ```This is a code block
 across two lines```
@@ -57,9 +57,27 @@ across two lines```
     def test_header_node(self):
         markdown = "### This is a header"
         node = block_to_block_node(markdown)
-        expected = [LeafNode("h3", "This is a header")]
+        expected = [ParentNode("h3", [LeafNode(None, "This is a header")])]
         self.assertListEqual(expected, node)
         expected_html = "<h3>This is a header</h3>"
+        self.assertEqual(expected_html, node[0].to_html())
+
+        div = markdown_to_html(markdown)
+        self.assertEqual(ParentNode("div", expected), div)
+        self.assertEqual(f"<div>{expected_html}</div>", div.to_html())
+
+    def test_header_stylized(self):
+        markdown = "### This is **a** _header_"
+        node = block_to_block_node(markdown)
+        print(node)
+        expected = [ParentNode("h3", [
+                LeafNode(None, "This is "),
+                LeafNode("b", "a"), 
+                LeafNode(None, " "),
+                LeafNode("i", "header")])]
+        print(expected)
+        self.assertListEqual(expected, node)
+        expected_html = "<h3>This is <b>a</b> <i>header</i></h3>"
         self.assertEqual(expected_html, node[0].to_html())
 
         div = markdown_to_html(markdown)
@@ -254,7 +272,11 @@ across two lines```
                 LeafNode(None, " text and "),
                 LeafNode("code", "code"),
                 LeafNode(None, " here\nThis is the same paragraph on a new line")]),
-            LeafNode("h3", "This is a header"),
+            ParentNode("h3", [
+                LeafNode(None, "This is "),
+                LeafNode("b", "a"), 
+                LeafNode(None, " "),
+                LeafNode("i", "header")]),
             LeafNode("code", "This is a code block\nacross two lines"),
             ParentNode("ol", [
                 ParentNode("li", [
@@ -292,7 +314,7 @@ across two lines```
                 LeafNode(None, " text and "),
                 LeafNode("code", "code"),
                 LeafNode(None, " here\nThis is the same paragraph on a new line")]),
-            LeafNode("h3", "This is a header"),
+            ParentNode("h3", [LeafNode(None, "This is a header")]),
             LeafNode("code", "This is a code block\nacross two lines"),
             ParentNode("ol", [
                 ParentNode("li", [

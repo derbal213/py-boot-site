@@ -32,8 +32,7 @@ def block_to_block_node(block: str):
             hashes = block.split(" ", 1)[0]
             #print(hashes)
             count_hash = len(hashes)
-            html_node = LeafNode(f"h{count_hash}", block[count_hash + 1:])
-            return [html_node]
+            return [text_to_parent(block[count_hash + 1:], f"h{count_hash}", block_type)]
         case BlockType.QUOTE:
             modified_text = re.sub(QUOTE_REMOVE_PATTERN, "", block).strip()
             return [text_to_parent(modified_text, "blockquote")]
@@ -62,8 +61,24 @@ def text_to_parent(text, parent_tag, block_type: BlockType = None):
         nodes = text_nodes_to_leaf_nodes(text_nodes, block_type)
     return ParentNode(parent_tag, nodes)
 
+def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
+    items = os.listdir(dir_path_content)
+    for i in items:
+        path = os.path.join(dir_path_content, i)
+        ext = os.path.splitext(i)[1]
+        if os.path.isfile(path):
+            if ext == ".md":
+                generate_page(path, template_path, os.path.join(dest_dir_path, i.replace(ext, ".html")))
+            else:
+                print(f"Skipping file without .md extension: {path}")
+        else:
+            # Directory
+            new_dest = os.path.join(dest_dir_path, i)
+            generate_pages_recursive(path, template_path, new_dest)
+
+
 def generate_page(from_path, template_path, dest_path):
-    print(f"Generating page from {from_path} to {dest_path} using {template_path}")
+    print(f"-> Generating page from {from_path}\n---> TO {dest_path}\n---> USING {template_path}")
     src_content = read_file(from_path)
     template_content = read_file(template_path)
     title = "Converted Markdown"
@@ -87,6 +102,7 @@ def read_file(path):
         return src_contents
     
 def write_file(path, contents):
+    print(f"-----> Writing file: {path}")
     with open(path, 'w') as file:
         file.write(contents)
 

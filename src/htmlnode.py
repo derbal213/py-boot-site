@@ -18,7 +18,18 @@ class HTMLNode():
             return str
         else:
             return None
-        
+    
+    def is_blank(self):
+        if self.tag is not None:
+            return False
+        if self.value is not None and self.value != "":
+            return False
+        if self.props is not None and len(self.props) > 0:
+            return False
+        if self.children is not None and len(self.children) > 0:
+            return False
+        return True
+
     def __repr__(self):
         return f"HTMLNode({self.tag}, {self.value}, {self.children}, {self.props_to_html()})"
     
