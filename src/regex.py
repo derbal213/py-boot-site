@@ -1,0 +1,12 @@
+IMAGE_PATTERN = r'!\[([^\]]*)\]\(([^)]*)\)'
+LINK_PATTERN = r'(?<!!)\[([^\]]*)\]\(([^)]*)\)'
+IMAGE_OR_LINK_PATTERN = r'!\[[^\]]*\]\([^)]*\)|(?<!!)\[[^\]]*\]\([^)]*\)'
+HEADER_PATTERN = r'^#{1,6} \w*'
+CODE_PATTERN = r'^`{3}[\s\S]*`{3}$'
+UNORDERED_LIST_PATTERN = r'^(?:- .*\n?)+$'
+ORDERED_LIST_PATTERN = r'^(?:\d\. .*\n?)+$'
+QUOTED_PATTERN = r'^(?:>.*\n?)+$'
+
+QUOTE_REMOVE_PATTERN = r'(?m)^>'
+UNORDERED_LIST_REMOVE_PATTERN = r'(?m)^- '
+ORDERED_LIST_REMOVE_PATTERN = r'(?m)^\d\. '

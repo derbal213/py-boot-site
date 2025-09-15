@@ -1,9 +1,8 @@
 import unittest
-from functions.split_nodes import split_nodes_delimiter, split_nested_nodes, split_nodes_image_and_links
-from functions.text_to_html import text_node_to_html_node, text_nodes_to_leaf_nodes, text_nodes_with_children_to_html
+from functions.split_nodes import split_nodes_delimiter, split_nodes_image_and_links
+from functions.text_to_html import text_nodes_to_leaf_nodes
 from textnode import TextNode, TextType, TextTypeSyntax
 from parentnode import ParentNode
-from functions.text_to_text_nodes import text_to_text_nodes
 
 class TestSplitNode(unittest.TestCase):
     def test_code(self):

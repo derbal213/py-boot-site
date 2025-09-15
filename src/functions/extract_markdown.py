@@ -1,7 +1,5 @@
 import re
-
-IMAGE_PATTERN = r'!\[([^\]]*)\]\(([^)]*)\)'
-LINK_PATTERN = r'(?<!!)\[([^\]]*)\]\(([^)]*)\)'
+from regex import *
 
 def extract_markdown_images(text):
     images = re.findall(IMAGE_PATTERN, text)
@@ -10,3 +8,4 @@ def extract_markdown_images(text):
 def extract_markdown_links(text):
     links = re.findall(LINK_PATTERN, text)
     return links
+

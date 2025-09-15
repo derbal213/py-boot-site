@@ -1,6 +1,7 @@
 from textnode import TextType, TextNode, TextTypeSyntax
 from functions.extract_markdown import extract_markdown_images, extract_markdown_links, IMAGE_PATTERN, LINK_PATTERN
 import re
+from regex import *
 
 def split_nodes_delimiter(old_nodes: list[TextNode], delimiter, text_type):
     new_nodes = []
@@ -133,11 +134,9 @@ def split_nodes_image_and_links(old_nodes: list[TextNode]):
 
 # Split markdown on images and links
 def split_markdown(text):
-    pattern = r'!\[[^\]]*\]\([^)]*\)|(?<!!)\[[^\]]*\]\([^)]*\)'
-    
     parts = []
     last = 0
-    for match in re.finditer(pattern, text):
+    for match in re.finditer(IMAGE_OR_LINK_PATTERN, text):
         # Add text before the match
         if match.start() > last:
             parts.append(text[last:match.start()])

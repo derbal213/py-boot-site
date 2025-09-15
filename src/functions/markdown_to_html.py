@@ -2,14 +2,13 @@ import re
 from functions.block import block_to_block_type, markdown_to_blocks, BlockType
 from leafnode import LeafNode
 from parentnode import ParentNode
-from textnode import TextNode, TextType, TextTypeSyntax
 from functions.text_to_text_nodes import text_to_text_nodes
-from functions.text_to_html import text_node_to_html_node, text_nodes_to_leaf_nodes
+from functions.text_to_html import text_nodes_to_leaf_nodes
+from regex import *
 
-QUOTE_REMOVE_REGEX = r'(?m)^>'
-UNORDERED_LIST_REMOVE_REGEX = r'(?m)^- '
-ORDERED_LIST_REMOVE_REGEX = r'(?m)^\d\. '
-
+# Takes a markdown text, converts it to text blocks
+# Then for each block converts that block to HTMLNode(s)
+# Finally wraps it in a parent div tag
 def markdown_to_html(markdown):
     md_blocks = markdown_to_blocks(markdown)
     children = []
@@ -20,6 +19,8 @@ def markdown_to_html(markdown):
     div = ParentNode("div", children)
     return div
 
+# Converts a text block to an HTMLNode
+# The block type determines whether it is a ParentNode or a LeafNode
 def block_to_block_node(block: str):
     block_type = block_to_block_type(block)
     match block_type:
@@ -32,18 +33,19 @@ def block_to_block_node(block: str):
             html_node = LeafNode(f"h{count_hash}", block[count_hash + 1:])
             return [html_node]
         case BlockType.QUOTE:
-            modified_text = re.sub(QUOTE_REMOVE_REGEX, "", block)
+            modified_text = re.sub(QUOTE_REMOVE_PATTERN, "", block)
             return [text_to_parent(modified_text, "blockquote")]
         case BlockType.UNORDERED_LIST:
-            modified_text = re.sub(UNORDERED_LIST_REMOVE_REGEX, "", block)
+            modified_text = re.sub(UNORDERED_LIST_REMOVE_PATTERN, "", block)
             return [text_to_parent(modified_text, "ul", block_type)]
         case BlockType.ORDERED_LIST:
-            modified_text = re.sub(ORDERED_LIST_REMOVE_REGEX, "", block)
+            modified_text = re.sub(ORDERED_LIST_REMOVE_PATTERN, "", block)
             return [text_to_parent(modified_text, "ol", block_type)]
         case _:
             return [text_to_parent(block, "p", block_type)]
         
-
+# Create a ParentNode with a given parent tag for when a text block
+# is likely to have nested syntax (such as paragraphs)
 def text_to_parent(text, parent_tag, block_type: BlockType = None):
     text_nodes = []
     nodes = []
@@ -57,5 +59,3 @@ def text_to_parent(text, parent_tag, block_type: BlockType = None):
         text_nodes = text_to_text_nodes(text)
         nodes = text_nodes_to_leaf_nodes(text_nodes, block_type)
     return ParentNode(parent_tag, nodes)
-
-#def leaf_to_parent(leaf_node: LeafNode):

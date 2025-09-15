@@ -1,5 +1,6 @@
 from enum import Enum
 import re
+from regex import *
 
 class BlockType(Enum):
     PARAGRAPH = "paragraph"
@@ -9,12 +10,7 @@ class BlockType(Enum):
     UNORDERED_LIST = "unordered list"
     ORDERED_LIST = "ordered_list"
 
-HEADER_REGEX = r'^#{1,6} \w*'
-CODE_REGEX = r'^`{3}[\s\S]*`{3}$'
-UNORDERED_LIST_REGEX = r'^(?:- .*\n?)+$'
-ORDERED_LIST_REGEX = r'^(?:\d\. .*\n?)+$'
-QUOTED_REGEX = r'^(?:>.*\n?)+$'
-
+# Split markdown text to a list of text blocks
 def markdown_to_blocks(text):
     blocks = []
     strings = text.split("\n\n")
@@ -23,14 +19,15 @@ def markdown_to_blocks(text):
             blocks.append(s.strip())
     return blocks
 
+# Determine the type of markdown a block is, defaulting to paragraph
 def block_to_block_type(block:str):
-    if re.match(HEADER_REGEX, block) is not None:
+    if re.match(HEADER_PATTERN, block) is not None:
         return BlockType.HEADING
-    elif re.match(CODE_REGEX, block) is not None:
+    elif re.match(CODE_PATTERN, block) is not None:
         return BlockType.CODE
-    elif re.match(UNORDERED_LIST_REGEX, block) is not None:
+    elif re.match(UNORDERED_LIST_PATTERN, block) is not None:
         return BlockType.UNORDERED_LIST
-    elif re.match(ORDERED_LIST_REGEX, block) is not None:
+    elif re.match(ORDERED_LIST_PATTERN, block) is not None:
         line_num = 1
         lines = block.strip().splitlines()
         #print(lines)
@@ -40,7 +37,7 @@ def block_to_block_type(block:str):
             else:
                 return BlockType.PARAGRAPH
         return BlockType.ORDERED_LIST
-    elif re.match(QUOTED_REGEX, block) is not None:
+    elif re.match(QUOTED_PATTERN, block) is not None:
         return BlockType.QUOTE
     else:
         return BlockType.PARAGRAPH

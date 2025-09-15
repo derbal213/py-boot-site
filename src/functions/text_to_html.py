@@ -4,17 +4,18 @@ from parentnode import ParentNode
 from leafnode import LeafNode
 from functions.block import BlockType
 
+# Convert a TextNode to a LeafNode
 def text_node_to_html_node(text_node: TextNode, block_type: BlockType = None):
     if text_node is None:
         return None
     
     tag = get_tag(text_node.text_type, block_type)
-    props = get_props(text_node)
     text = text_node.text
     if text_node.text_type == TextType.IMAGE:
         text = ""
     return LeafNode(tag, text, get_props(text_node))
         
+# Get the properties of a text node for links and images
 def get_props(text_node: TextNode):
     match text_node.text_type:
         case TextType.LINK:
@@ -30,7 +31,7 @@ def get_props(text_node: TextNode):
         case _:
             return None
 
-        
+# Get the tag for a given text type
 def get_tag(text_type: TextType, block_type: BlockType = None):
         match text_type:
             case TextType.PLAIN:
@@ -51,7 +52,7 @@ def get_tag(text_type: TextType, block_type: BlockType = None):
             case _:
                 raise ValueError("Text type does not match an HTML tag")
 
-        
+# Convert TextNodes to LeafNodes    
 def text_nodes_to_leaf_nodes(text_nodes: list[TextNode], block_type: BlockType = None):
     if text_nodes is None:
         return None
@@ -62,18 +63,18 @@ def text_nodes_to_leaf_nodes(text_nodes: list[TextNode], block_type: BlockType =
     return leaf_nodes
 
 
-def text_nodes_with_children_to_html(text_nodes: list[TextNode], block_type: BlockType = None):
-    if text_nodes is None:
-        return None
+# def text_nodes_with_children_to_html(text_nodes: list[TextNode], block_type: BlockType = None):
+#     if text_nodes is None:
+#         return None
     
-    nodes = []
-    for n in text_nodes:
-        if n.text == "" and len(n.children) > 0:
-            children = []
-            for child in n.children:
-                child_html = text_nodes_with_children_to_html([child], block_type)
-                children.extend(child_html)        
-            nodes.append(ParentNode(get_tag(n.text_type, block_type), children, get_props(n)))
-        else:
-            nodes.append(text_node_to_html_node(n, block_type))
-    return nodes
+#     nodes = []
+#     for n in text_nodes:
+#         if n.text == "" and len(n.children) > 0:
+#             children = []
+#             for child in n.children:
+#                 child_html = text_nodes_with_children_to_html([child], block_type)
+#                 children.extend(child_html)        
+#             nodes.append(ParentNode(get_tag(n.text_type, block_type), children, get_props(n)))
+#         else:
+#             nodes.append(text_node_to_html_node(n, block_type))
+#     return nodes
