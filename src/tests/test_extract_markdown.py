@@ -1,7 +1,53 @@
 import unittest
-from functions.extract_markdown import extract_markdown_images, extract_markdown_links
+from functions.extract_markdown import extract_markdown_images, extract_markdown_links, extract_title
 
 class TestExtractMarkdown(unittest.TestCase):
+    title_md = """
+This is a **bolded** paragraph
+
+This is another paragraph with _italic_ text and `code` here
+This is the same paragraph on a new line
+
+# This is the title in the middle
+
+### This is a header
+
+```This is a code block
+across two lines```
+
+1. This is an ordered list
+2. With multiple items
+
+- This is an unordered list
+- with items
+
+>This is a quote
+>That goes onto two lines
+>-Michael Scott
+"""
+
+    missing_title_md = """
+This is a **bolded** paragraph
+
+This is another paragraph with _italic_ text and `code` here
+This is the same paragraph on a new line
+
+### This is a header
+
+```This is a code block
+across two lines```
+
+1. This is an ordered list
+2. With multiple items
+
+- This is an unordered list
+- with items
+
+>This is a quote
+>That goes onto two lines
+>-Michael Scott
+"""
+
     def test_extract_markdown_images(self):
         matches = extract_markdown_images(
             "This is text with an ![image](https://i.imgur.com/zjjcJKZ.png)"
@@ -119,3 +165,21 @@ class TestExtractMarkdown(unittest.TestCase):
         self.assertListEqual(expected_links, matched_links)
         self.assertListEqual(expected_imgs, matched_imgs)
 
+    def test_extract_title_simple(self):
+        text = "# Hello"
+        title = extract_title(text)
+        self.assertEqual("Hello", title)
+
+    def test_extract_title_fail(self):
+        text = "## Hello"
+        with self.assertRaises(Exception) as cm:
+            extract_title(text)
+        self.assertIn("Markdown does not contain a Title", str(cm.exception))
+
+    def test_extract_title_buried(self):
+        self.assertEqual("This is the title in the middle", extract_title(self.title_md))
+
+    def test_extract_title_missing(self):
+        with self.assertRaises(Exception) as cm:
+            extract_title(self.missing_title_md)
+        self.assertIn("Markdown does not contain a Title", str(cm.exception))
