@@ -44,13 +44,11 @@ class TestSplitNode(unittest.TestCase):
             leaf_nodes = text_nodes_to_leaf_nodes(new_nodes)
             parent_node = ParentNode("p", leaf_nodes)
             expected = expected_vals[i]
-            #print(expected)
             self.assertEqual(expected, parent_node.to_html())
 
     def test_split_img(self):
         node = TextNode("This is a text node with an image ![alt text](www.google.com/test.png)", TextType.PLAIN)
         new_nodes = split_nodes_image_and_links([node])
-        #print(new_nodes)
         self.assertEqual(2, len(new_nodes))
         leaf_nodes = text_nodes_to_leaf_nodes(new_nodes)
         self.assertEqual(2, len(leaf_nodes))
@@ -63,7 +61,6 @@ class TestSplitNode(unittest.TestCase):
     def test_split_link(self):
         node = TextNode("This is a text node with a link [alt text](www.google.com/test.png)", TextType.PLAIN)
         new_nodes = split_nodes_image_and_links([node])
-        #print(new_nodes)
         self.assertEqual(2, len(new_nodes))
         leaf_nodes = text_nodes_to_leaf_nodes(new_nodes)
         self.assertEqual(2, len(leaf_nodes))
@@ -76,7 +73,6 @@ class TestSplitNode(unittest.TestCase):
     def test_split_multiple_img(self):
         node = TextNode("This is a text node ![first image](example.com/test.png) with two images ![alt text](www.google.com/test.png)", TextType.PLAIN)
         new_nodes = split_nodes_image_and_links([node])
-        #print(new_nodes)
         self.assertEqual(4, len(new_nodes))
         leaf_nodes = text_nodes_to_leaf_nodes(new_nodes)
         self.assertEqual(4, len(leaf_nodes))
@@ -89,7 +85,6 @@ class TestSplitNode(unittest.TestCase):
     def test_split_multiple_links(self):
         node = TextNode("This is a text [node](example.com) with two links [alt text](www.google.com)", TextType.PLAIN)
         new_nodes = split_nodes_image_and_links([node])
-        #print(new_nodes)
         self.assertEqual(4, len(new_nodes))
         leaf_nodes = text_nodes_to_leaf_nodes(new_nodes)
         self.assertEqual(4, len(leaf_nodes))
@@ -102,7 +97,6 @@ class TestSplitNode(unittest.TestCase):
     def test_split_links_and_imgs(self):
         node = TextNode("This is a [sentence](url) with both [links](url2) and images! ![cool](http://img.com/cool.png) ![happy](http://img.com/happy.png)", TextType.PLAIN)
         new_nodes = split_nodes_image_and_links([node])
-        #print(new_nodes)
         self.assertEqual(8, len(new_nodes))
         leaf_nodes = text_nodes_to_leaf_nodes(new_nodes)
         self.assertEqual(8, len(leaf_nodes))
@@ -110,7 +104,6 @@ class TestSplitNode(unittest.TestCase):
         parent_node = ParentNode("p", leaf_nodes)
         expected = f'<p>This is a <a href="url">sentence</a> with both <a href="url2">links</a> and images! <img src="http://img.com/cool.png" alt="cool" /> <img src="http://img.com/happy.png" alt="happy" /></p>'
         actual = parent_node.to_html()
-        #print(f"-----> {actual}")
         self.assertEqual(expected, actual)
     
     def test_split_images(self):
@@ -130,42 +123,3 @@ class TestSplitNode(unittest.TestCase):
             ],
             new_nodes,
         )
-
-    # def test_nested(self):
-    #     node = TextNode(f"This is text with an _italicized and **bolded**_ word", TextType.PLAIN)
-    #     new_nodes = split_nested_nodes([node])
-    #     #print(new_nodes)
-    #     expected_nodes = [
-    #         TextNode("This is text with an ", TextType.PLAIN),
-    #         TextNode("", TextType.ITALIC, None, [
-    #             TextNode("italicized and ", TextType.PLAIN),
-    #             TextNode("bolded", TextType.BOLD)
-    #         ]),
-    #         TextNode(" word", TextType.PLAIN)
-    #     ]
-    #     self.assertListEqual(expected_nodes, new_nodes)
-
-    #     nodes = text_nodes_with_children_to_html(new_nodes)
-    #     #print(nodes)
-    #     parent = ParentNode("p", nodes)
-    #     expected = "<p>This is text with an <i>italicized and <b>bolded</b></i> word</p>"
-    #     self.assertEqual(expected, parent.to_html())
-
-    # def test_nested_decorated_links(self):
-    #     node = TextNode(f"This is text with an [_italicized and **bolded**_ link](example.com)", TextType.PLAIN)
-    #     new_nodes = split_nested_nodes([node])
-    #     expected_nodes = [
-    #         TextNode("This is text with an ", TextType.PLAIN),
-    #         TextNode("", TextType.LINK, "example.com", [
-    #             TextNode("", TextType.ITALIC, None, [
-    #                 TextNode("italicized and ", TextType.PLAIN),
-    #                 TextNode("bolded", TextType.BOLD)
-    #             ]),
-    #         TextNode(" link", TextType.PLAIN)])
-    #     ]
-    #     self.assertListEqual(expected_nodes, new_nodes)
-
-    #     nodes = text_nodes_with_children_to_html(new_nodes)
-    #     parent = ParentNode("p", nodes)
-    #     expected = '<p>This is text with an <a href="example.com"><i>italicized and <b>bolded</b></i> link</a></p>'
-    #     self.assertEqual(expected, parent.to_html())

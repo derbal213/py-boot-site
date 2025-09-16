@@ -30,7 +30,6 @@ def block_to_block_node(block: str):
             return [LeafNode("code", block[3:-3])]
         case BlockType.HEADING:
             hashes = block.split(" ", 1)[0]
-            #print(hashes)
             count_hash = len(hashes)
             return [text_to_parent(block[count_hash + 1:], f"h{count_hash}", block_type)]
         case BlockType.QUOTE:

@@ -1,6 +1,5 @@
 import unittest
 from textnode import TextNode, TextType
-from leafnode import LeafNode
 from functions.text_to_html import text_node_to_html_node
 
 class TestTextToHTML(unittest.TestCase):
@@ -71,7 +70,6 @@ class TestTextToHTML(unittest.TestCase):
         html_node = text_node_to_html_node(node)
         expected = '<img src="boot.dev" alt="This is an img node" />'
         self.assertEqual(html_node.tag, "img")
-        #self.assertEqual(html_node.value, "This is an img node")
         self.assertEqual(html_node.to_html(), expected)
 
     def test_img_no_text(self):
@@ -79,7 +77,6 @@ class TestTextToHTML(unittest.TestCase):
         html_node = text_node_to_html_node(node)
         expected = '<img src="boot.dev" />'
         self.assertEqual(html_node.tag, "img")
-        #self.assertEqual(html_node.value, "This is a img node")
         self.assertEqual(html_node.to_html(), expected)
 
     def test_img_no_url(self):
@@ -87,7 +84,6 @@ class TestTextToHTML(unittest.TestCase):
         html_node = text_node_to_html_node(node)
         expected = '<img alt="This is an img node" />'
         self.assertEqual(html_node.tag, "img")
-        #self.assertEqual(html_node.value, "This is an img node")
         self.assertEqual(html_node.to_html(), expected)
 
     def test_img_just_tag(self):
@@ -95,5 +91,4 @@ class TestTextToHTML(unittest.TestCase):
         html_node = text_node_to_html_node(node)
         expected = '<img />'
         self.assertEqual(html_node.tag, "img")
-        #self.assertEqual(html_node.value, "This is an img node")
         self.assertEqual(html_node.to_html(), expected)

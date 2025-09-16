@@ -51,7 +51,6 @@ across two lines```
         expected_types = [BlockType.PARAGRAPH, BlockType.PARAGRAPH, BlockType.HEADING, BlockType.CODE, BlockType.ORDERED_LIST, BlockType.UNORDERED_LIST, BlockType.QUOTE]
         for i in range(len(blocks)):
             actual = block_to_block_type(blocks[i])
-            #print(f"-----> {actual}")
             expected = expected_types[i]
             self.assertEqual(expected, actual)
 

@@ -69,13 +69,11 @@ across two lines```
     def test_header_stylized(self):
         markdown = "### This is **a** _header_"
         node = block_to_block_node(markdown)
-        print(node)
         expected = [ParentNode("h3", [
                 LeafNode(None, "This is "),
                 LeafNode("b", "a"), 
                 LeafNode(None, " "),
                 LeafNode("i", "header")])]
-        print(expected)
         self.assertListEqual(expected, node)
         expected_html = "<h3>This is <b>a</b> <i>header</i></h3>"
         self.assertEqual(expected_html, node[0].to_html())
