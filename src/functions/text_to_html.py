@@ -1,6 +1,4 @@
 from textnode import TextNode, TextType
-from htmlnode import HTMLNode
-from parentnode import ParentNode
 from leafnode import LeafNode
 from functions.block import BlockType
 
@@ -63,20 +61,3 @@ def text_nodes_to_leaf_nodes(text_nodes: list[TextNode], block_type: BlockType =
         if not html_node.is_blank():
             leaf_nodes.append(text_node_to_html_node(n, block_type))
     return leaf_nodes
-
-
-# def text_nodes_with_children_to_html(text_nodes: list[TextNode], block_type: BlockType = None):
-#     if text_nodes is None:
-#         return None
-    
-#     nodes = []
-#     for n in text_nodes:
-#         if n.text == "" and len(n.children) > 0:
-#             children = []
-#             for child in n.children:
-#                 child_html = text_nodes_with_children_to_html([child], block_type)
-#                 children.extend(child_html)        
-#             nodes.append(ParentNode(get_tag(n.text_type, block_type), children, get_props(n)))
-#         else:
-#             nodes.append(text_node_to_html_node(n, block_type))
-#     return nodes

@@ -30,7 +30,6 @@ def block_to_block_type(block:str):
     elif re.match(ORDERED_LIST_PATTERN, block) is not None:
         line_num = 1
         lines = block.strip().splitlines()
-        #print(lines)
         for s in lines:
             if s.startswith(f"{line_num}. "):
                 line_num += 1

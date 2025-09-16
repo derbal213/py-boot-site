@@ -61,6 +61,8 @@ def text_to_parent(text, parent_tag, block_type: BlockType = None):
         nodes = text_nodes_to_leaf_nodes(text_nodes, block_type)
     return ParentNode(parent_tag, nodes)
 
+# Generate HTML pages from markdown files located in a content directory
+# Runs recursively for all subdirectories
 def generate_pages_recursive(dir_path_content, template_path, dest_dir_path, base_path = "/"):
     items = os.listdir(dir_path_content)
     for i in items:
@@ -77,6 +79,7 @@ def generate_pages_recursive(dir_path_content, template_path, dest_dir_path, bas
             generate_pages_recursive(path, template_path, new_dest, base_path)
 
 
+# Generate an HTML file from a markdown file
 def generate_page(from_path, template_path, dest_path, base_path = "/"):
     print(f"-> Generating page from {from_path}\n---> TO {dest_path}\n---> USING {template_path}")
     src_content = read_file(from_path)
@@ -104,7 +107,6 @@ def read_file(path):
         return src_contents
     
 def write_file(path, contents):
-    print(f"-----> Writing file: {path}")
     with open(path, 'w') as file:
         file.write(contents)
 

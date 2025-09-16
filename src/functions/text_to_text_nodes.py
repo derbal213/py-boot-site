@@ -10,10 +10,3 @@ def text_to_text_nodes(text:str):
     new_nodes = split_nodes_image_and_links(new_nodes)
     
     return new_nodes
-
-""" def text_to_text_node_helper(new_nodes: list[TextNode], text_type):
-    added_nodes = []
-    for node in new_nodes:
-       match text_type:
-           case TextType.BOLD:
-               added_nodes.extend(split_nodes_delimiter()) """
