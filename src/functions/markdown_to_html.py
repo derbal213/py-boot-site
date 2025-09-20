@@ -1,15 +1,15 @@
 import re
 import os
-from src.functions.block import block_to_block_type, markdown_to_blocks, BlockType
-from src.leafnode import LeafNode
-from src.parentnode import ParentNode
-from src.functions.text_to_text_nodes import text_to_text_nodes
-from src.functions.text_to_html import text_nodes_to_leaf_nodes
-from src.regex_patterns import *
-from src.functions.extract_markdown import extract_title
-from src.htmlnode import HTMLNode
-from src.textnode import TextNode
-from src.functions.file_handler import read_file, write_file, check_directory
+from functions.block import block_to_block_type, markdown_to_blocks, BlockType
+from leafnode import LeafNode
+from parentnode import ParentNode
+from functions.text_to_text_nodes import text_to_text_nodes
+from functions.text_to_html import text_nodes_to_leaf_nodes
+from regex_patterns import *
+from functions.extract_markdown import extract_title
+from htmlnode import HTMLNode
+from textnode import TextNode
+from functions.file_handler import read_file, write_file, check_directory
 
 # Takes a markdown text, converts it to text blocks
 # Then for each block converts that block to HTMLNode(s)

@@ -1,6 +1,6 @@
 from enum import Enum
 import re
-from src.regex_patterns import *
+from regex_patterns import *
 
 class BlockType(Enum):
     PARAGRAPH = "paragraph"

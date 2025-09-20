@@ -1,5 +1,5 @@
 import unittest
-from src.functions.block import markdown_to_blocks, block_to_block_type, BlockType
+from functions.block import markdown_to_blocks, block_to_block_type, BlockType
 
 class TestBlock(unittest.TestCase):
     test_md = """

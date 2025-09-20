@@ -1,7 +1,7 @@
-from src.textnode import TextNode, TextType
-from src.leafnode import LeafNode
-from src.functions.block import BlockType
-from src.htmlnode import HTMLNode
+from textnode import TextNode, TextType
+from leafnode import LeafNode
+from functions.block import BlockType
+from htmlnode import HTMLNode
 
 # Convert a TextNode to a LeafNode
 def text_node_to_html_node(text_node: TextNode, block_type: BlockType = BlockType.PARAGRAPH) -> LeafNode:

@@ -1,7 +1,7 @@
 import unittest
-from src.functions.markdown_to_html import markdown_to_html, block_to_block_node
-from src.leafnode import LeafNode
-from src.parentnode import ParentNode
+from functions.markdown_to_html import markdown_to_html, block_to_block_node
+from leafnode import LeafNode
+from parentnode import ParentNode
 
 class TestMarkdownToHTML(unittest.TestCase):
     block_md = """

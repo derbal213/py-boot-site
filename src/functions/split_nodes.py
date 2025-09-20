@@ -1,7 +1,7 @@
 import re
-from src.textnode import TextType, TextNode
-from src.functions.extract_markdown import extract_markdown_images, extract_markdown_links
-from src.regex_patterns import *
+from textnode import TextType, TextNode
+from functions.extract_markdown import extract_markdown_images, extract_markdown_links
+from regex_patterns import *
 
 def split_nodes_on_delimiter(old_nodes: list[TextNode], delimiter: str, text_type: TextType) -> list[TextNode]:
     new_nodes: list[TextNode] = []
