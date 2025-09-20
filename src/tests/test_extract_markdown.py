@@ -1,5 +1,5 @@
 import unittest
-from functions.extract_markdown import extract_markdown_images, extract_markdown_links, extract_title
+from src.functions.extract_markdown import extract_markdown_images, extract_markdown_links, extract_title
 
 class TestExtractMarkdown(unittest.TestCase):
     title_md = """

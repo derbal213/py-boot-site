@@ -1,8 +1,8 @@
 import unittest
-from functions.text_to_text_nodes import text_to_text_nodes
-from textnode import TextNode, TextType
-from parentnode import ParentNode
-from functions.text_to_html import text_nodes_to_leaf_nodes
+from src.functions.text_to_text_nodes import text_to_text_nodes
+from src.textnode import TextNode, TextType
+from src.parentnode import ParentNode
+from src.functions.text_to_html import text_nodes_to_leaf_nodes
 
 class TestTextToTextNode(unittest.TestCase):
     def test_all(self):

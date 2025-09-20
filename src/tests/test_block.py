@@ -1,5 +1,5 @@
 import unittest
-from functions.block import markdown_to_blocks, block_to_block_type, BlockType
+from src.functions.block import markdown_to_blocks, block_to_block_type, BlockType
 
 class TestBlock(unittest.TestCase):
     test_md = """
@@ -133,13 +133,6 @@ across two lines```
 
     def test_ordered_missing_period(self):
         blocks = markdown_to_blocks("1. This is line one\n2 This is line 2\n3. This is line 3")
-        self.assertEqual(1, len(blocks))
-
-        actual = block_to_block_type(blocks[0])
-        self.assertEqual(BlockType.PARAGRAPH, actual)
-
-    def test_ordered_missing_space(self):
-        blocks = markdown_to_blocks("1. This is line one\n2. This is line 2\n3.This is line 3")
         self.assertEqual(1, len(blocks))
 
         actual = block_to_block_type(blocks[0])

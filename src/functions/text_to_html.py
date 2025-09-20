@@ -1,36 +1,38 @@
-from textnode import TextNode, TextType
-from leafnode import LeafNode
-from functions.block import BlockType
+from src.textnode import TextNode, TextType
+from src.leafnode import LeafNode
+from src.functions.block import BlockType
+from src.htmlnode import HTMLNode
 
 # Convert a TextNode to a LeafNode
-def text_node_to_html_node(text_node: TextNode, block_type: BlockType = None):
+def text_node_to_html_node(text_node: TextNode, block_type: BlockType = BlockType.PARAGRAPH) -> LeafNode:
     if text_node is None:
         return None
     
-    tag = get_tag(text_node.text_type, block_type)
-    text = text_node.text
+    tag: str | None = get_tag(text_node.text_type, block_type)
+    text: str = text_node.text
     if text_node.text_type == TextType.IMAGE:
         text = ""
     return LeafNode(tag, text, get_props(text_node))
         
 # Get the properties of a text node for links and images
-def get_props(text_node: TextNode):
+def get_props(text_node: TextNode) -> dict | None:
     match text_node.text_type:
         case TextType.LINK:
             return {"href":text_node.url}
         case TextType.IMAGE:
-            props = {}
+            props: dict[str, str] = {}
             if text_node.url is not None:
                 props["src"] = text_node.url
             if text_node.text is not None:
                 props["alt"] = text_node.text
-            if len(props) == 0: props = None
+            if len(props) == 0:
+                return None
             return props
         case _:
             return None
 
 # Get the tag for a given text type
-def get_tag(text_type: TextType, block_type: BlockType = None):
+def get_tag(text_type: TextType, block_type: BlockType = BlockType.PARAGRAPH) -> str | None:
         match text_type:
             case TextType.PLAIN:
                 if block_type == BlockType.UNORDERED_LIST or block_type == BlockType.ORDERED_LIST:
@@ -51,13 +53,13 @@ def get_tag(text_type: TextType, block_type: BlockType = None):
                 raise ValueError("Text type does not match an HTML tag")
 
 # Convert TextNodes to LeafNodes    
-def text_nodes_to_leaf_nodes(text_nodes: list[TextNode], block_type: BlockType = None):
+def text_nodes_to_leaf_nodes(text_nodes: list[TextNode], block_type: BlockType = BlockType.PARAGRAPH) -> list[HTMLNode]:
     if text_nodes is None:
         return None
     
-    leaf_nodes = []
+    leaf_nodes: list[HTMLNode] = []
     for n in text_nodes:
-        html_node = text_node_to_html_node(n, block_type)
+        html_node: HTMLNode = text_node_to_html_node(n, block_type)
         if not html_node.is_blank():
             leaf_nodes.append(text_node_to_html_node(n, block_type))
     return leaf_nodes

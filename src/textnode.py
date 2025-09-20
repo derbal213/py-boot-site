@@ -18,22 +18,19 @@ class TextTypeSyntax:
     ALL_OPTIONS = [BOLD, ITALIC, CODE, LINK, IMAGE]
 
 class TextNode():
-    def __init__(self, text: str, text_type, url=None, child_nodes = None):
+    def __init__(self, text: str, text_type: TextType, url: None|str = None) -> None:
         self.text = text
         self.text_type = text_type
         self.url = url
-        self.children = child_nodes
 
-    def __eq__(self, value):
+    def __eq__(self, value) -> bool:
         if self.text != value.text:
             return False
         if self.text_type != value.text_type:
             return False
         if self.url != value.url:
             return False
-        if self.children != value.children:
-            return False
         return True
     
     def __repr__(self):
-        return f"TextNode({self.text}, {self.text_type.value}, {self.url}, {self.children})"
+        return f"TextNode({self.text}, {self.text_type.value}, {self.url})"
