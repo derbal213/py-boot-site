@@ -5,10 +5,9 @@ def copy_files(src: str, dest: str) -> None:
     if not os.path.exists(src):
         raise Exception(f"Given source path does not exist: {src}")
     
+    print(f"-> Reset {dest}")
     if os.path.exists(dest):
         shutil.rmtree(dest)
-
-    print(f"-> Reset {dest}")
     os.mkdir(dest)
 
     items: list[str] = os.listdir(src)
@@ -26,7 +25,6 @@ def read_file(path: str) -> str:
         if src_file is None:
             raise Exception(f"File could not be read at {path}")
         src_contents: str = src_file.read()
-        #os.close(src_file)
         return src_contents
     
 def write_file(path: str, contents: str) -> None:

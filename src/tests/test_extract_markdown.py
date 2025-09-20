@@ -172,14 +172,12 @@ across two lines```
 
     def test_extract_title_fail(self):
         text = "## Hello"
-        with self.assertRaises(Exception) as cm:
-            extract_title(text)
-        self.assertIn("Markdown does not contain a Title", str(cm.exception))
+        title = extract_title(text)
+        self.assertEqual("Default Title", title)
 
     def test_extract_title_buried(self):
         self.assertEqual("This is the title in the middle", extract_title(self.title_md))
 
     def test_extract_title_missing(self):
-        with self.assertRaises(Exception) as cm:
-            extract_title(self.missing_title_md)
-        self.assertIn("Markdown does not contain a Title", str(cm.exception))
+        title = extract_title(self.missing_title_md)
+        self.assertEqual("Default Title", title)

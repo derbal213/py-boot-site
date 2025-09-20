@@ -18,8 +18,7 @@ def markdown_to_html(markdown: str) -> ParentNode:
     md_blocks: list[str] = markdown_to_blocks(markdown)
     children: list[HTMLNode] = []
     for block in md_blocks:
-        nodes = block_to_block_node(block)
-        children.extend(nodes)
+        children.extend(block_to_block_node(block))
 
     div = ParentNode("div", children)
     return div
@@ -85,15 +84,12 @@ def generate_page(from_path: str, template_path: str, dest_path: str, base_path:
     print(f"-> Generating page from {from_path}\n---> TO {dest_path}\n---> USING {template_path}")
     src_content: str = read_file(from_path)
     template_content: str = read_file(template_path)
-    title: str = "Converted Markdown"
-    try:
-        title = extract_title(src_content)
-    except Exception as e:
-        print(f"Error when extracting title. Using default title. Error: {e}")
-
+    title: str = extract_title(src_content)
     html: str = markdown_to_html(src_content).to_html()
+
     final_content: str = template_content.replace("{{ Title }}", title).replace("{{ Content }}", html)
     final_content = final_content.replace('href="/', f'href="{base_path}')
     final_content = final_content.replace('src="/', f'src="{base_path}')
+    
     check_directory(dest_path)
     write_file(dest_path, final_content)

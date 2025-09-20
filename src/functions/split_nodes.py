@@ -3,7 +3,7 @@ from src.textnode import TextType, TextNode
 from src.functions.extract_markdown import extract_markdown_images, extract_markdown_links
 from src.regex_patterns import *
 
-def split_nodes_delimiter(old_nodes: list[TextNode], delimiter: str, text_type: TextType) -> list[TextNode]:
+def split_nodes_on_delimiter(old_nodes: list[TextNode], delimiter: str, text_type: TextType) -> list[TextNode]:
     new_nodes: list[TextNode] = []
     for node in old_nodes:
         if node.text_type != TextType.PLAIN:
@@ -20,7 +20,7 @@ def split_nodes_delimiter(old_nodes: list[TextNode], delimiter: str, text_type: 
     return new_nodes
 
 
-def split_nodes_image_and_links(old_nodes: list[TextNode]) -> list[TextNode]:
+def split_nodes_on_images_and_links(old_nodes: list[TextNode]) -> list[TextNode]:
     new_nodes: list[TextNode] = []
     for node in old_nodes:
         if node.text_type != TextType.PLAIN:
@@ -33,7 +33,7 @@ def split_nodes_image_and_links(old_nodes: list[TextNode]) -> list[TextNode]:
             if len(images) == 0 and len(links) == 0:
                 new_nodes.append(node)
             else:
-                parts: list[str] = split_markdown_on_imgs_links(node.text)
+                parts: list[str] = split_string_on_images_and_links(node.text)
                 for p in parts:
                     if re.match(IMAGE_PATTERN, p):
                         images = extract_markdown_images(p)
@@ -51,7 +51,7 @@ def split_nodes_image_and_links(old_nodes: list[TextNode]) -> list[TextNode]:
     return new_nodes
 
 # Split markdown on images and links
-def split_markdown_on_imgs_links(text: str) -> list[str]:
+def split_string_on_images_and_links(text: str) -> list[str]:
     parts: list[str] = []
     last: int = 0
     for match in re.finditer(IMAGE_OR_LINK_PATTERN, text):
