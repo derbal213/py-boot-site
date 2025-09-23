@@ -1,0 +1,3 @@
+rules:
+  - id: typing-list
+    enabled: false

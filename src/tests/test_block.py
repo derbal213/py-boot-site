@@ -49,10 +49,12 @@ across two lines```
     def test_block_to_block_type_all(self):
         blocks = markdown_to_blocks(self.block_md)
         expected_types = [BlockType.PARAGRAPH, BlockType.PARAGRAPH, BlockType.HEADING, BlockType.CODE, BlockType.ORDERED_LIST, BlockType.UNORDERED_LIST, BlockType.QUOTE]
-        for i in range(len(blocks)):
-            actual = block_to_block_type(blocks[i])
-            expected = expected_types[i]
-            self.assertEqual(expected, actual)
+        self.assertListEqual(expected_types,
+            list(map(block_to_block_type, blocks)))
+        # for i in range(len(blocks)):
+        #     actual = block_to_block_type(blocks[i])
+        #     expected = expected_types[i]
+        #     self.assertEqual(expected, actual)
 
     def test_block_to_block_type_none(self):
         blocks = markdown_to_blocks("This has only a single block")
@@ -141,6 +143,13 @@ across two lines```
     def test_quote_missing_second_line(self):
         blocks = markdown_to_blocks(">This is a quote across\nmultiple lines")
         self.assertEqual(1, len(blocks))
-
+        
         actual = block_to_block_type(blocks[0])
         self.assertEqual(BlockType.PARAGRAPH, actual)
+
+    def test_proper_multiline_quote(self):
+        blocks = markdown_to_blocks(">This is a quote line one\n>And this is line two\n>And this is line three")
+        self.assertEqual(1, len(blocks))
+        actual = block_to_block_type(blocks[0])
+        self.assertEqual(BlockType.QUOTE, actual)
+
