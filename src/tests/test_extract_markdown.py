@@ -65,6 +65,13 @@ across two lines```
         expected = [("one", "url1"), ("two", "url2")]
         matches = extract_markdown_images(text)
         self.assertListEqual(expected, matches)
+        
+    def test_extract_malformed_image(self):
+        matches = extract_markdown_images(
+            "This is text with an ![image](https://i.imgur.com/zjjcJKZ.png"
+        )
+        self.assertListEqual([], matches)
+        #self.assertListEqual([("image", "https://i.imgur.com/zjjcJKZ.png")], matches)
 
     def test_extract_single_link(self):
         text = "[one](url1)"
@@ -181,3 +188,19 @@ across two lines```
     def test_extract_title_missing(self):
         title = extract_title(self.missing_title_md)
         self.assertEqual("Default Title", title)
+
+    def test_extract_link_in_bold(self):
+        matches = extract_markdown_links("This is markdown with *bolded [link](example.com) in the middle*")
+        self.assertListEqual([("link", "example.com")], matches)
+        
+    def test_extract_img_in_bold(self):
+        matches = extract_markdown_images("This is markdown with *bolded ![image](example.com) in the middle*")
+        self.assertListEqual([("image", "example.com")], matches)
+        
+    def test_extract_surrounding_whitespace(self):
+        matches = extract_markdown_links("This is markdown with *bolded [ link ](example.com) in the middle*")
+        self.assertListEqual([(" link ", "example.com")], matches)
+
+    def test_extract_img_whitespace(self):
+        matches = extract_markdown_images("This is markdown with *bolded ![ image ]( example.com) in the middle*")
+        self.assertListEqual([(" image ", " example.com")], matches)

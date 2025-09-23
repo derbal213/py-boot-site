@@ -9,37 +9,42 @@ class HTMLNode():
         raise NotImplementedError("Not yet implemented")
     
     def props_to_html(self) -> str | None:
-        if self.props is not None:
-            props_str = ""
-            for key in self.props:
-                value = self.props[key]
-                props_str = f'{props_str} {key}="{value}"'
-            props_str = props_str.strip()
-            return props_str
-        else:
+        if self.props is None:
             return None
+        if len(self.props) == 0:
+            return None
+        
+        props_str = ""
+        for key in self.props:
+            value = self.props[key]
+            props_str = f'{props_str} {key}="{value}"'
+        return props_str.strip()
     
     def is_blank(self) -> bool:
         if self.tag is not None:
             return False
-        if self.value is not None and self.value != "":
+        elif self.value is not None and self.value != "":
             return False
-        if self.props is not None and len(self.props) > 0:
+        elif self.props is not None and len(self.props) > 0:
             return False
-        if self.children is not None and len(self.children) > 0:
+        elif self.children is not None and len(self.children) > 0:
             return False
-        return True
+        else: 
+            return True
 
     def __repr__(self) -> str:
         return f"HTMLNode({self.tag}, {self.value}, {self.children}, {self.props_to_html()})"
     
     def __eq__(self, value) -> bool:
-        if self.tag != value.tag:
+        if not isinstance(value, HTMLNode):
+            return NotImplemented
+        elif self.tag != value.tag:
             return False
-        if self.value != value.value:
+        elif self.value != value.value:
             return False
-        if self.children != value.children:
+        elif self.children != value.children:
             return False
-        if self.props != value.props:
+        elif self.props != value.props:
             return False
-        return True
+        else:
+            return True
