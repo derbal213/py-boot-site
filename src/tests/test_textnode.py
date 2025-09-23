@@ -14,13 +14,13 @@ class TestTextNode(unittest.TestCase):
 
     def test_repr(self):
         node = TextNode("This is an italic node", TextType.ITALIC, "boot.dev")
-        expected = "TextNode(This is an italic node, italic, boot.dev)"
+        expected = 'TextNode("This is an italic node", "italic", "boot.dev")'
         result = str(node)
         self.assertEqual(result, expected)
 
     def test_repr_none(self):
         node = TextNode("This is a text node", TextType.PLAIN)
-        expected = "TextNode(This is a text node, plain, None)"
+        expected = 'TextNode("This is a text node", "plain", "None")'
         result = str(node)
         self.assertEqual(result, expected)
 

@@ -1,7 +1,7 @@
 import re
 from textnode import TextType, TextNode
 from functions.extract_markdown import extract_markdown_images, extract_markdown_links
-from regex_patterns import *
+from regex_patterns import IMAGE_PATTERN, LINK_PATTERN, IMAGE_OR_LINK_PATTERN
 
 def split_nodes_on_delimiter(old_nodes: list[TextNode], delimiter: str, text_type: TextType) -> list[TextNode]:
     new_nodes: list[TextNode] = []
@@ -30,7 +30,7 @@ def split_nodes_on_images_and_links(old_nodes: list[TextNode]) -> list[TextNode]
             links: list[str] = extract_markdown_links(node.text)
             # Do an initial check to see if there are any links or images at all
             # If none, add the node unchanged. If there are, then parse it out correctly
-            if len(images) == 0 and len(links) == 0:
+            if not images and not links:
                 new_nodes.append(node)
             else:
                 parts: list[str] = split_string_on_images_and_links(node.text)
@@ -45,7 +45,7 @@ def split_nodes_on_images_and_links(old_nodes: list[TextNode]) -> list[TextNode]
                         for link in links:
                             link_node: TextNode = TextNode(link[0], TextType.LINK, link[1])
                             new_nodes.append(link_node)
-                    else:
+                    elif p != "":
                         plain_node = TextNode(p, TextType.PLAIN)
                         new_nodes.append(plain_node)
     return new_nodes

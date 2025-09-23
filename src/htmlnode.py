@@ -10,12 +10,12 @@ class HTMLNode():
     
     def props_to_html(self) -> str | None:
         if self.props is not None:
-            str = ""
+            props_str = ""
             for key in self.props:
                 value = self.props[key]
-                str = f'{str} {key}="{value}"'
-            str = str.strip()
-            return str
+                props_str = f'{props_str} {key}="{value}"'
+            props_str = props_str.strip()
+            return props_str
         else:
             return None
     

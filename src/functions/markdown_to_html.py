@@ -5,7 +5,7 @@ from leafnode import LeafNode
 from parentnode import ParentNode
 from functions.text_to_text_nodes import text_to_text_nodes
 from functions.text_to_html import text_nodes_to_leaf_nodes
-from regex_patterns import *
+from regex_patterns import QUOTE_REMOVE_PATTERN, UNORDERED_LIST_REMOVE_PATTERN, ORDERED_LIST_REMOVE_PATTERN
 from functions.extract_markdown import extract_title
 from htmlnode import HTMLNode
 from textnode import TextNode
@@ -20,8 +20,7 @@ def markdown_to_html(markdown: str) -> ParentNode:
     for block in md_blocks:
         children.extend(block_to_block_node(block))
 
-    div = ParentNode("div", children)
-    return div
+    return ParentNode("div", children)
 
 # Converts a text block to an HTMLNode
 # The block type determines whether it is a ParentNode or a LeafNode
@@ -50,7 +49,7 @@ def block_to_block_node(block: str) -> list[HTMLNode]:
 # is likely to have nested syntax (such as paragraphs)
 def text_to_parent(text: str, parent_tag: str, block_type: BlockType = BlockType.PARAGRAPH) -> ParentNode:
     nodes: list[HTMLNode] = []
-    if block_type == BlockType.UNORDERED_LIST or block_type == BlockType.ORDERED_LIST:
+    if block_type in [BlockType.UNORDERED_LIST,BlockType.ORDERED_LIST]:
         list_items: list[str] = text.splitlines() #For lists, we already know it's a valid list so each line is am HTML node
         for item in list_items:
             item_nodes: list[TextNode] = text_to_text_nodes(item)

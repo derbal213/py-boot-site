@@ -1,4 +1,5 @@
 from enum import Enum
+from typing import Optional
 
 class TextType(Enum):
     PLAIN = "plain"
@@ -18,12 +19,15 @@ class TextTypeSyntax:
     ALL_OPTIONS = [BOLD, ITALIC, CODE, LINK, IMAGE]
 
 class TextNode():
-    def __init__(self, text: str, text_type: TextType, url: None|str = None) -> None:
+    def __init__(self, text: str, text_type: TextType, url: Optional[str] = None) -> None:
         self.text = text
         self.text_type = text_type
         self.url = url
 
     def __eq__(self, value) -> bool:
+        # sourcery skip: assign-if-exp, boolean-if-exp-identity, reintroduce-else, remove-unnecessary-cast
+        if not isinstance(value, TextNode):
+            return False
         if self.text != value.text:
             return False
         if self.text_type != value.text_type:
@@ -33,4 +37,4 @@ class TextNode():
         return True
     
     def __repr__(self):
-        return f"TextNode({self.text}, {self.text_type.value}, {self.url})"
+        return f'TextNode("{self.text}", "{self.text_type.value}", "{self.url}")'

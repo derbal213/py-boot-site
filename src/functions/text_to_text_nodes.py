@@ -1,7 +1,7 @@
 from functions.split_nodes import split_nodes_on_images_and_links, split_nodes_on_delimiter
 from textnode import TextNode, TextType, TextTypeSyntax
 
-def text_to_text_nodes(text:str) -> list[TextNode]:
+def text_to_text_nodes(text: str) -> list[TextNode]:
     base_node: TextNode = TextNode(text, TextType.PLAIN)
 
     new_nodes: list[TextNode] = split_nodes_on_delimiter([base_node], TextTypeSyntax.BOLD, TextType.BOLD)
