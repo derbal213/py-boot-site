@@ -10,7 +10,7 @@ def text_node_to_html_node(text_node: Optional[TextNode], block_type: BlockType 
         return None
 
     # Tag can (and sometimes should) be None and that case is handled elsewhere
-    tag: str | None = get_tag(text_node.text_type, block_type)
+    tag: Optional[str] = get_tag(text_node.text_type, block_type)
     text = "" if text_node.text_type == TextType.IMAGE else text_node.text
     return LeafNode(tag, text, get_props(text_node))
         

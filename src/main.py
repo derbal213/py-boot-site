@@ -3,9 +3,7 @@ from functions.markdown_to_html import generate_pages_recursive
 import sys
 
 def main() -> None:
-    base_path: str = "/"
-    if sys.argv is not None and len(sys.argv) > 0:
-        base_path = sys.argv[1]
+    base_path = sys.argv[1] if sys.argv is not None and len(sys.argv) > 0 else "/"
     root: str = "/Users/derekball/Library/Mobile Documents/com~apple~CloudDocs/Mailbox Cloud Drive/OX Drive/My files.localized/Programming/git/py-boot-site"
     src: str = f"{root}/static"
     dest: str = f"{root}/docs"

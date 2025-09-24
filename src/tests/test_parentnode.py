@@ -17,37 +17,34 @@ class TestParentNode(unittest.TestCase):
             "<div><span><b>grandchild</b></span></div>",
         )
 
-    def test_to_html_no_children(self):
+    def test_no_children(self):
         with self.assertRaises(ValueError) as cm1:
-            ParentNode("p", None).to_html()
+            ParentNode("p", None)
         self.assertIn("Must include children", str(cm1.exception))
 
-        node2 = ParentNode("div", [])
         with self.assertRaises(ValueError) as cm2:
-            node2.to_html()
+            ParentNode("div", [])
         self.assertIn("Must include children", str(cm2.exception))
 
-    def test_to_html_no_tag(self):
+    def test_no_tag(self):
         with self.assertRaises(ValueError) as cm1:
             ParentNode(None, None).to_html()
         self.assertIn("Must include a tag", str(cm1.exception))
 
     def test_to_html_multiple_leafs(self):
-        child1 = LeafNode("a", "This is a link", {"href":"boot.dev", "target": "_blank"})
-        child2 = LeafNode("b", "This is bold text")
-        parent_node = ParentNode("p", [child1, child2], {"title":"This is a paragraph"})
-        expected = '<p title="This is a paragraph"><a href="boot.dev" target="_blank">This is a link</a><b>This is bold text</b></p>'
-        actual = parent_node.to_html()
-        self.assertEqual(expected, actual)
+        parent_node = self.build_parent_node()
+        self.assertEqual(
+            '<p title="This is a paragraph"><a href="boot.dev" target="_blank">This is a link</a><b>This is bold text</b></p>',
+            parent_node.to_html(),
+        )
 
     def test_to_html_multiple_parents_leafs(self):
-        child1 = LeafNode("a", "This is a link", {"href":"boot.dev", "target": "_blank"})
-        child2 = LeafNode("b", "This is bold text")
-        parent_node = ParentNode("p", [child1, child2], {"title":"This is a paragraph"})
+        parent_node = self.build_parent_node()
         parent_parent = ParentNode("div", [parent_node])
-        expected = '<div><p title="This is a paragraph"><a href="boot.dev" target="_blank">This is a link</a><b>This is bold text</b></p></div>'
-        actual = parent_parent.to_html()
-        self.assertEqual(expected, actual)
+        self.assertEqual(
+            '<div><p title="This is a paragraph"><a href="boot.dev" target="_blank">This is a link</a><b>This is bold text</b></p></div>',
+            parent_parent.to_html(),
+        )
 
     def test_to_html_with_props(self):
         child = LeafNode("p", "text")
@@ -59,3 +56,10 @@ class TestParentNode(unittest.TestCase):
         self.assertIn('id="s1"', result)
         self.assertTrue(result.endswith("</section>"))
         self.assertIn("<p>text</p>", result)
+        
+    def build_parent_node(self):
+        child1 = LeafNode(
+            "a", "This is a link", {"href": "boot.dev", "target": "_blank"}
+        )
+        child2 = LeafNode("b", "This is bold text")
+        return ParentNode("p", [child1, child2], {"title": "This is a paragraph"})
